@@ -8,7 +8,7 @@ return [
         'http://localhost:5173', 
         'http://localhost:3000',
         'https://unifa.rcmp.edu.my',
-        'https://api.unifa.rcmp.edu.my'
+        'https://unifa.rcmp.edu.my/api'
     ],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
