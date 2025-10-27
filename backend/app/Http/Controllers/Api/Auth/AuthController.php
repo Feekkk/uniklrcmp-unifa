@@ -24,32 +24,63 @@ class AuthController extends ApiController
             'username' => 'required|string|max:255|unique:users',
             'fullName' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'bankName' => 'required|string|max:255',
-            'bankAccount' => 'required|string|max:255',
+            'bankName' => 'nullable|string|max:255',
+            'bankAccount' => 'nullable|string|max:255',
             'password' => 'required|string|min:8|confirmed',
+            'phoneNo' => 'nullable|string|max:20',
+            'icNo' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'program' => 'nullable|string|max:255',
+            'semester' => 'nullable|integer',
         ]);
 
-        $user = User::create([
-            'name' => $validated['fullName'],
-            'username' => $validated['username'],
-            'fullName' => $validated['fullName'],
-            'email' => $validated['email'],
-            'bankName' => $validated['bankName'],
-            'bankAccount' => $validated['bankAccount'],
-            'password' => Hash::make($validated['password']),
-        ]);
+        try {
+            $user = User::create([
+                'name' => $validated['fullName'],
+                'username' => $validated['username'],
+                'fullName' => $validated['fullName'],
+                'email' => $validated['email'],
+                'bankName' => $validated['bankName'] ?? null,
+                'bankAccount' => $validated['bankAccount'] ?? null,
+                'password' => Hash::make($validated['password']),
+                'role' => 'student',
+                'phoneNo' => $validated['phoneNo'] ?? null,
+                'icNo' => $validated['icNo'] ?? null,
+                'address' => $validated['address'] ?? null,
+                'program' => $validated['program'] ?? null,
+                'semester' => $validated['semester'] ?? null,
+            ]);
 
-        // Public demo: return simple success payload without token
-        return response()->json([
-            'message' => 'Registered successfully',
-            'role' => 'user',
-            'user' => [
-                'id' => $user->id,
-                'username' => $user->username,
-                'fullName' => $user->fullName,
-                'email' => $user->email,
-            ]
-        ], 201);
+            // Generate token for the newly registered user
+            $token = JWTAuth::fromUser($user);
+
+            return response()->json([
+                'message' => 'Registered successfully',
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => config('jwt.ttl') * 60,
+                'role' => 'user',
+                'user' => [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'fullName' => $user->fullName,
+                    'email' => $user->email,
+                    'bankName' => $user->bankName,
+                    'bankAccount' => $user->bankAccount,
+                    'program' => $user->program,
+                    'semester' => $user->semester,
+                    'phoneNo' => $user->phoneNo,
+                    'icNo' => $user->icNo,
+                    'address' => $user->address,
+                ]
+            ], 201);
+        } catch (\Exception $e) {
+            Log::error('Registration error: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'Registration failed',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function login(LoginRequest $request): JsonResponse

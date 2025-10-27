@@ -17,7 +17,7 @@ const processQueue = (error: any = null) => {
 };
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: 'https://unifa.rcmp.edu.my/api',
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
