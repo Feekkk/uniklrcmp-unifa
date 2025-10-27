@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller
 {
@@ -28,33 +29,38 @@ class AuthController extends Controller
         // Get credentials
         $credentials = $request->only(['email', 'password']);
 
-        // Attempt to authenticate
-        if (!$token = Auth::attempt($credentials)) {
-            return response()->json(['error' => 'Invalid credentials'], 401);
-        }
+        try {
+            // Attempt to authenticate via JWT
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Invalid credentials'], 401);
+            }
 
-        // Get the authenticated user
-        $user = Auth::user();
+            // Get the authenticated user
+            $user = JWTAuth::user();
+        } catch (JWTException $e) {
+            Log::error('JWT auth error on login: ' . $e->getMessage());
+            return response()->json(['error' => 'Could not create token'], 500);
+        }
 
         // Create response
         return response()->json([
             'message' => 'Successfully logged in',
             'token' => $token,
             'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'username' => $user->username,
-                'role' => $user->role,
+                'id' => $user->id ?? null,
+                'name' => $user->name ?? null,
+                'email' => $user->email ?? null,
+                'username' => $user->username ?? null,
+                'role' => $user->role ?? 'user',
                 'profile' => [
-                    'fullName' => $user->fullName,
-                    'bankName' => $user->bankName,
-                    'bankAccount' => $user->bankAccount,
-                    'program' => $user->program,
-                    'semester' => $user->semester,
-                    'phoneNo' => $user->phoneNo,
-                    'icNo' => $user->icNo,
-                    'address' => $user->address,
+                    'fullName' => $user->fullName ?? null,
+                    'bankName' => $user->bankName ?? null,
+                    'bankAccount' => $user->bankAccount ?? null,
+                    'program' => $user->program ?? null,
+                    'semester' => $user->semester ?? null,
+                    'phoneNo' => $user->phoneNo ?? null,
+                    'icNo' => $user->icNo ?? null,
+                    'address' => $user->address ?? null,
                 ]
             ]
         ]);
@@ -95,7 +101,7 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'username' => $request->username,
                 'password' => Hash::make($request->password),
-                'role' => 'student', // Default role for registration
+                'role' => 'student',
                 'fullName' => $request->fullName,
                 'phoneNo' => $request->phoneNo,
                 'icNo' => $request->icNo,
@@ -144,24 +150,29 @@ class AuthController extends Controller
 
     public function me()
     {
-        $user = Auth::user();
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+        } catch (JWTException $e) {
+            Log::error('JWT auth error on me(): ' . $e->getMessage());
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
 
         return response()->json([
             'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'username' => $user->username,
-                'role' => $user->role,
+                'id' => $user->id ?? null,
+                'name' => $user->name ?? null,
+                'email' => $user->email ?? null,
+                'username' => $user->username ?? null,
+                'role' => $user->role ?? 'user',
                 'profile' => [
-                    'fullName' => $user->fullName,
-                    'bankName' => $user->bankName,
-                    'bankAccount' => $user->bankAccount,
-                    'program' => $user->program,
-                    'semester' => $user->semester,
-                    'phoneNo' => $user->phoneNo,
-                    'icNo' => $user->icNo,
-                    'address' => $user->address,
+                    'fullName' => $user->fullName ?? null,
+                    'bankName' => $user->bankName ?? null,
+                    'bankAccount' => $user->bankAccount ?? null,
+                    'program' => $user->program ?? null,
+                    'semester' => $user->semester ?? null,
+                    'phoneNo' => $user->phoneNo ?? null,
+                    'icNo' => $user->icNo ?? null,
+                    'address' => $user->address ?? null,
                 ]
             ]
         ]);
@@ -169,9 +180,15 @@ class AuthController extends Controller
 
     public function refresh()
     {
-        return response()->json([
-            'token' => Auth::refresh(),
-            'message' => 'Token refreshed successfully'
-        ]);
+        try {
+            $token = JWTAuth::parseToken()->refresh();
+            return response()->json([
+                'token' => $token,
+                'message' => 'Token refreshed successfully'
+            ]);
+        } catch (JWTException $e) {
+            Log::error('JWT refresh error: ' . $e->getMessage());
+            return response()->json(['error' => 'Unable to refresh token'], 401);
+        }
     }
 }
