@@ -26,15 +26,33 @@ class CommitteeSeeder extends Seeder
         // Create default committee accounts
         $defaultCommittees = [
             [
-                'name' => 'Committee 1',
+                'name' => 'Chairman',
                 'username' => 'committee1',
                 'email' => 'committee1@unikl.com',
                 'password' => 'committee123',
             ],
             [
-                'name' => 'Committee 2',
+                'name' => 'Head Of Department',
                 'username' => 'committee2',
                 'email' => 'committee2@unikl.com',
+                'password' => 'Committee123',
+            ],
+            [
+                'name' => 'Committee 3',
+                'username' => 'committee3',
+                'email' => 'committee3@unikl.com',
+                'password' => 'Committee123',
+            ],
+            [
+                'name' => 'Committee 4',
+                'username' => 'committee4',
+                'email' => 'committee4@unikl.com',
+                'password' => 'Committee123',
+            ],
+            [
+                'name' => 'Committee 5',
+                'username' => 'committee5',
+                'email' => 'committee5@unikl.com',
                 'password' => 'Committee123',
             ]
         ];
