@@ -24,22 +24,22 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'username' => fake()->userName(),
+            'name' => $this->faker->name(),
+            'username' => $this->faker->userName(),
             'fullName' => function (array $attributes) {
                 return $attributes['name'];
             },
-            'email' => fake()->unique()->safeEmail(),
-            'program' => fake()->randomElement(['Software Engineering', 'Computer Science', 'Information Technology']),
-            'semester' => fake()->numberBetween(1, 8),
-            'phoneNo' => fake()->phoneNumber(),
-            'icNo' => fake()->unique()->numerify('#############'),
-            'address' => fake()->address(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'program' => $this->faker->randomElement(['Software Engineering', 'Computer Science', 'Information Technology']),
+            'semester' => $this->faker->numberBetween(1, 8),
+            'phoneNo' => $this->faker->phoneNumber(),
+            'icNo' => $this->faker->unique()->numerify('#############'),
+            'address' => $this->faker->address(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'role' => 'user',
-            'bankName' => fake()->randomElement(['CIMB Bank', 'Maybank', 'Public Bank', 'RHB Bank', 'Hong Leong Bank']),
-            'bankAccount' => fake()->numerify('##############'),
+            'role' => 'student',
+            'bankName' => $this->faker->randomElement(['CIMB Bank', 'Maybank', 'Public Bank', 'RHB Bank', 'Hong Leong Bank']),
+            'bankAccount' => $this->faker->numerify('##############'),
         ];
     }
 
