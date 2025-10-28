@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Exceptions\ResourceNotFoundException;
 use App\Exceptions\UnauthorizedException;
+use App\Models\ApplicationStatusLog;
 
 class ApplicationController extends ApiController
 {

@@ -14,16 +14,16 @@ return new class extends Migration
         // Welfare fund transactions table
         Schema::create('welfare_fund_transactions', function (Blueprint $table) {
             $table->string('transactionId')->primary();
-            $table->enum('type', ['inflow', 'outflow']); // Money going in or out
+            $table->enum('type', ['inflow', 'outflow']); 
             $table->decimal('amount', 15, 2);
-            $table->string('category'); // e.g., 'government_grant', 'student_aid', 'donation', 'administrative'
+            $table->string('category'); 
             $table->string('description');
-            $table->string('receipt_number')->nullable(); // Receipt/Invoice number
-            $table->string('processed_by')->nullable(); // Admin/Committee member ID
-            $table->string('application_id')->nullable(); // Link to application if applicable
-            $table->decimal('balance_after', 15, 2); // Running balance after transaction
-            $table->text('remarks')->nullable(); // Additional remarks
-            $table->json('metadata')->nullable(); // Additional data like bank details, etc.
+            $table->string('receipt_number')->nullable();
+            $table->string('processed_by')->nullable(); 
+            $table->string('application_id')->nullable();
+            $table->decimal('balance_after', 15, 2); 
+            $table->text('remarks')->nullable(); 
+            $table->json('metadata')->nullable(); 
             $table->timestamps();
             
             // Indexes for better performance

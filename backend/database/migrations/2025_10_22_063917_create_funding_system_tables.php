@@ -110,21 +110,6 @@ return new class extends Migration
             $table->foreign('uploadedBy')->references('id')->on('users');
         });
 
-        // Approval workflow table
-        Schema::create('approval_workflows', function (Blueprint $table) {
-            $table->string('workflowId')->primary();
-            $table->string('applicationId');
-            $table->string('approverType');
-            $table->unsignedBigInteger('approverId');
-            $table->string('previousStatus');
-            $table->string('newStatus');
-            $table->string('comments')->nullable();
-            $table->timestamp('reviewedAt');
-            $table->string('decision');
-
-            $table->foreign('applicationId')->references('applicationId')->on('applications')->onDelete('cascade');
-        });
-
         // Application status logs table
         Schema::create('application_status_logs', function (Blueprint $table) {
             $table->string('logId')->primary();

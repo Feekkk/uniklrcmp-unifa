@@ -56,7 +56,7 @@ class FinancialAidApplicationRequest extends FormRequest
         return [
             'bereavementType' => 'required|string|in:student,parent,sibling',
             'deathCertificate' => 'nullable|array',
-            'deathCertificate.*' => 'file|mimes:pdf,jpg,jpeg,png|max:5120', // 5MB max per file
+            'deathCertificate.*' => 'file|mimes:pdf,jpg,jpeg,png|max:5120', 
         ];
     }
 
@@ -72,7 +72,7 @@ class FinancialAidApplicationRequest extends FormRequest
                 'clinicName' => 'required|string|max:255',
                 'reasonVisit' => 'required|string|max:1000',
                 'visitDateTime' => 'required|date',
-                'totalAmountOutpatient' => 'required|numeric|min:0|max:30', // RM 30 limit
+                'totalAmountOutpatient' => 'required|numeric|min:0|max:30', 
                 'receiptClinic' => 'required|array',
                 'receiptClinic.*' => 'file|mimes:pdf,jpg,jpeg,png|max:5120',
             ]);
@@ -105,14 +105,14 @@ class FinancialAidApplicationRequest extends FormRequest
 
         if ($categoryId === 'CAT-EMERGENCY-NATURAL') {
             $rules = array_merge($rules, [
-                'totalAmountCriticalIllness' => 'required|numeric|min:0|max:200', // RM 200 limit
+                'totalAmountCriticalIllness' => 'required|numeric|min:0|max:200', 
                 'criticalIllnessDocuments' => 'required|array',
                 'criticalIllnessDocuments.*' => 'file|mimes:pdf,jpg,jpeg,png|max:5120',
             ]);
         } elseif ($categoryId === 'CAT-EMERGENCY-FAMILY') {
             $rules = array_merge($rules, [
                 'naturalDisasterCase' => 'required|string|max:1000',
-                'totalAmountNaturalDisaster' => 'required|numeric|min:0|max:200', // RM 200 limit
+                'totalAmountNaturalDisaster' => 'required|numeric|min:0|max:200', 
                 'naturalDisasterDocuments' => 'required|array',
                 'naturalDisasterDocuments.*' => 'file|mimes:pdf,jpg,jpeg,png|max:5120',
             ]);

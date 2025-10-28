@@ -25,7 +25,7 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('role')->default('user'); // 'student', 'admin', 'committee'
+            $table->string('role')->default('user'); 
             $table->string('bankName')->nullable();
             $table->string('bankAccount')->nullable();
             $table->string('profile_picture')->nullable();
