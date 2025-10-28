@@ -81,13 +81,13 @@ class FinancialAidApplicationRequest extends FormRequest
                 'reasonVisitInpatient' => 'required|string|max:1000',
                 'checkInDate' => 'required|date',
                 'checkOutDate' => 'required|date|after:checkInDate',
-                'totalAmountInpatient' => 'required|numeric|min:0|max:5000', 
+                'totalAmountInpatient' => 'required|numeric|min:0|max:10000', 
                 'hospitalDocuments' => 'required|array',
                 'hospitalDocuments.*' => 'file|mimes:pdf,jpg,jpeg,png|max:5120',
             ]);
         } elseif ($categoryId === 'CAT-ILLNESS-CHRONIC') {
             $rules = array_merge($rules, [
-                'totalAmountInjuries' => 'required|numeric|min:0|max:200', // RM 200 limit
+                'totalAmountInjuries' => 'required|numeric|min:0|max:200',
                 'injuryDocuments' => 'required|array',
                 'injuryDocuments.*' => 'file|mimes:pdf,jpg,jpeg,png|max:5120',
             ]);
@@ -159,7 +159,7 @@ class FinancialAidApplicationRequest extends FormRequest
             'checkOutDate.required' => 'Check-out date is required.',
             'checkOutDate.after' => 'Check-out date must be after check-in date.',
             'totalAmountInpatient.required' => 'Total amount is required.',
-            'totalAmountInpatient.max' => 'Inpatient treatment limit is RM 5,000.',
+            'totalAmountInpatient.max' => 'Inpatient treatment limit is RM 10,000.',
             'hospitalDocuments.required' => 'Hospital documents are required.',
             'hospitalDocuments.array' => 'Hospital documents must be an array of files.',
             'hospitalDocuments.*.mimes' => 'Hospital documents must be PDF, JPG, or PNG files.',

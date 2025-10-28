@@ -355,7 +355,7 @@ const StudentForm = () => {
         const hasDates = formData.checkInDate && formData.checkOutDate;
         const validDateOrder = hasDates ? new Date(formData.checkOutDate) > new Date(formData.checkInDate) : false;
         return basicInfoValid && formData.reasonVisitInpatient && formData.checkInDate && 
-               formData.checkOutDate && validDateOrder && formData.totalAmountInpatient && amount > 0 && amount <= 5000 && formData.hospitalDocuments;
+               formData.checkOutDate && validDateOrder && formData.totalAmountInpatient && amount > 0 && amount <= 10000 && formData.hospitalDocuments;
       }
       
       if (formData.fundSubCategory === 'injuries') {
@@ -804,7 +804,7 @@ const StudentForm = () => {
                             <strong>Eligibility:</strong> Applicable only if hospitalization cost exceeded the stipulated insurance coverage overall annual limit per annum per student RM20,000.00.
                           </p>
                           <p className="text-sm text-green-800 mt-1">
-                            <strong>Coverage:</strong>Provision of fund more than RM 1,000.00 requires SWF Campus committee approval.
+                            <strong>Coverage Limit:</strong> Maximum RM 20,000.00 per claim. Provision of fund more than RM 1,000.00 requires SWF Campus committee approval.
                           </p>
                         </div>
                       </div>
@@ -847,7 +847,7 @@ const StudentForm = () => {
                         type="number"
                           min="0"
                           step="0.01"
-                          max="1000"
+                          max="10000"
                         value={formData.totalAmountInpatient}
                         onChange={(e) => handleInputChange('totalAmountInpatient', e.target.value)}
                         placeholder="Enter amount"
